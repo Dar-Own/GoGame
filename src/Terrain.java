@@ -9,7 +9,7 @@ public class Terrain {
     public Terrain(int taille) {
         this.taille = taille;
         this.plateau = new ArrayList<>();
-        // Initialiser le plateau avec des intersections vides
+        // Initialiser le plateau avec des intersections videsff
         for (int i = 0; i < taille; i++) {
             ArrayList<Character> ligne = new ArrayList<>();
             for (int j = 0; j < taille; j++) {
