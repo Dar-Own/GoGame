@@ -5,7 +5,7 @@ public class Terrain {
     private int taille;
     private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    // Constructeur
+    
     public Terrain(int taille) {
         this.taille = taille;
         this.plateau = new ArrayList<>();
@@ -19,32 +19,34 @@ public class Terrain {
         }
     }
 
-    // Méthode pour afficher le plateau avec les indices
+    
     public void afficherPlateau() {
-        // Afficher les indices supérieurs
-        System.out.print("   ");
+       
+        System.out.print("    "); 
         for (int i = 0; i < taille; i++) {
             System.out.print(alphabet.charAt(i) + " ");
         }
-        System.out.println("   ");
+        System.out.println("    ");
 
-        // Afficher le plateau avec les indices latéraux et les intersections
+        
         for (int i = taille - 1; i >= 0; i--) {
-            System.out.print((i + 1) + "  "); // Afficher les indices latéraux
+            int indiceLateral = i + 1;
+            System.out.print((indiceLateral < 10 ? " " : "") + indiceLateral + "  ");
             for (int j = 0; j < taille; j++) {
                 System.out.print(plateau.get(i).get(j) + " ");
             }
-            System.out.print(" " + (i + 1)); // Ajouter les indices droits
+            System.out.print(" " + (indiceLateral < 10 ? " " : "") + indiceLateral); 
             System.out.println();
         }
 
-        // Afficher les indices inférieurs
-        System.out.print("   ");
+        
+        System.out.print("    ");
         for (int i = 0; i < taille; i++) {
             System.out.print(alphabet.charAt(i) + " ");
         }
-        System.out.println("   ");
+        System.out.println("    ");
     }
 
-    // Vous pouvez ajouter d'autres méthodes selon les besoins du jeu
+
+    
 }
