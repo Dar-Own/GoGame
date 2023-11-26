@@ -47,6 +47,4 @@ public class Terrain {
         System.out.println("    ");
     }
 
-
-    
 }

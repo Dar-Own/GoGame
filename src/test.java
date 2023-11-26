@@ -1,10 +1,27 @@
+import java.util.Scanner;
+
 public class test {
     public static void main(String[] args) {
-        Terrain plateau = new Terrain(11); // Crée un plateau de Go de taille 9x9
-        plateau.afficherPlateau(); // Affiche le plateau initial
-        //OKdd
+        Terrain go = null; 
+
+        while (true) {
+            Scanner entry = new Scanner(System.in);
+            String entre2 = entry.nextLine();
+            String[] entree = entre2.split(" ");
+
+            if (entree[0].equals("quit")) {
+                entry.close();
+                System.exit(0);
+            } else if (entree[0].equals("boardsize")) {
+                if (entree.length == 2) {
+                    go = new Terrain(Integer.valueOf(entree[1]));
+                    
+                }
+            } else if (entree[0].equals("showboard") && go != null) {
+                go.afficherPlateau();
+            } else if (entree[0].equals("clear_board")) {
+                System.out.println("clear board");
+            }
+        }
     }
 }
-
-
- 
