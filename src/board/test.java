@@ -1,9 +1,9 @@
+package board;
 import java.util.Scanner;
 
 public class test {
     public static void main(String[] args) {
-        Terrain go = null; 
-
+        Board go = null; 
         while (true) {
             Scanner entry = new Scanner(System.in);
             String entre2 = entry.nextLine();
@@ -14,13 +14,11 @@ public class test {
                 System.exit(0);
             } else if (entree[0].equals("boardsize")) {
                 if (entree.length == 2) {
-                    go = new Terrain(Integer.valueOf(entree[1]));
+                    go = new Board(Integer.valueOf(entree[1]));
                     
                 }
             } else if (entree[0].equals("showboard") && go != null) {
-                go.afficherPlateau();
-            } else if (entree[0].equals("clear_board")) {
-                System.out.println("clear board");
+                go.showBoard();
             }
         }
     }
