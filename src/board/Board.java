@@ -4,9 +4,8 @@ public class Board {
     private int taille;
     private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    public Board(int taille) {
-        assert (taille < 27 && taille >=4 );
-        this.taille = taille;
+    public Board(int size) {
+        this.taille = size;
         this.plateau = new char[taille][taille];
 
         for (int i = 0; i < taille; i++) {
