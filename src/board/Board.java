@@ -5,7 +5,7 @@ public class Board {
     private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public Board(int taille) {
-        assert (taille < 27 && taille != 0);
+        assert (taille < 27 && taille >=4 );
         this.taille = taille;
         this.plateau = new char[taille][taille];
 
@@ -22,7 +22,6 @@ public class Board {
             System.out.print(alphabet.charAt(i) + " ");
         }
         System.out.println("    ");
-
         for (int i = taille - 1; i >= 0; i--) {
             int indiceLateral = i + 1;
             System.out.print((indiceLateral < 10 ? " " : "") + indiceLateral + "  ");
