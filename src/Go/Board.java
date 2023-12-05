@@ -29,7 +29,7 @@ public class Board {
             for (int j = 0; j < taille; j++) {
                 System.out.print(plateau[i][j] + " ");
             }
-            System.out.print(" " + (indiceLateral < 10 ? " " : "") + indiceLateral); 
+            System.out.print((indiceLateral < 10 ? " " : "") + indiceLateral); 
             System.out.println();
         }
         System.out.print("    ");
@@ -38,5 +38,4 @@ public class Board {
         }
         System.out.println("    ");
     }
-
 }
