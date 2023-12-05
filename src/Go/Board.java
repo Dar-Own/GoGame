@@ -35,7 +35,7 @@ public class Board {
         for (int i = 0; i < taille; i++) {
             System.out.print(alphabet.charAt(i) + " ");
         }
-        System.out.println("    ");
+        System.out.println("    "); 
     } 
 
 }

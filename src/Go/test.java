@@ -21,7 +21,7 @@ public class test {
                 go.showBoard();
             } else if (inputParts[0].equals("quit")) {
                 entry.close();
-                System.exit(0);
+                System.exit(0); 
             }
         }
     }
