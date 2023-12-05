@@ -14,7 +14,7 @@ public class Board {
             }
         }
     }
-
+ 
     public void showBoard() {
         System.out.print("    "); 
         for (int i = 0; i < taille; i++) {

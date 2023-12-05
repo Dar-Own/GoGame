@@ -4,7 +4,7 @@ import Go.Board;
 
 public class test {
     public static void main(String[] args) {
-        Board go = null; 
+        Board go = null;  
         while (true) {
             Scanner entry = new Scanner(System.in);
             String entre2 = entry.nextLine();
