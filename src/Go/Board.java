@@ -1,8 +1,8 @@
-package board;
+package Go;
 public class Board {
     private char[][] plateau;
     private int taille;
-    private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
 
     public Board(int size) {
         this.taille = size;
