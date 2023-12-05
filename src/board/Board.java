@@ -36,6 +36,6 @@ public class Board {
             System.out.print(alphabet.charAt(i) + " ");
         }
         System.out.println("    ");
-    }
+    } 
 
 }

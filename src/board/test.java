@@ -15,7 +15,7 @@ public class test {
                 	go = new Board(size);
                 }
                 else {
-                	System.out.println("Taille incorrect");
+                	System.out.println("Tailles incorrect");
                 }
             } else if (inputParts[0].equals("showboard") && go != null) {
                 go.showBoard();
