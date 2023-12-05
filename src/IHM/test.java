@@ -23,7 +23,7 @@ public class test {
                 go.showBoard();
             }
         }
-    }
+    } 
 }
 
 
