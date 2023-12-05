@@ -1,4 +1,4 @@
-package board;
+package Go;
 import java.util.Scanner;
 
 public class test {
@@ -15,7 +15,7 @@ public class test {
                 	go = new Board(size);
                 }
                 else {
-                	System.out.println("Tailles incorrect");
+                	System.out.println("error 603");
                 }
             } else if (inputParts[0].equals("showboard") && go != null) {
                 go.showBoard();

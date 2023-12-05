@@ -1,4 +1,4 @@
-package board;
+package Go;
 public class Board {
     private char[][] plateau;
     private int taille;
