@@ -2,7 +2,7 @@ package Go;
 import java.util.Scanner;
 
 public class test {
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
         Board go = null;
         Scanner entry = new Scanner(System.in);
         while (true) {
