@@ -9,6 +9,7 @@ public class test {
             Scanner entry = new Scanner(System.in);
             String entre2 = entry.nextLine();
             String[] entree = entre2.split(" ");
+            
 
             if (entree[0].equals("quit")) {
                 entry.close();

@@ -19,6 +19,7 @@ public class Board {
         System.out.print("    "); 
         for (int i = 0; i < taille; i++) {
             System.out.print(alphabet.charAt(i) + " ");
+            
         }
         System.out.println("    ");
         for (int i = taille - 1; i >= 0; i--) {
