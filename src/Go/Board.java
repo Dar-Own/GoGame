@@ -1,5 +1,5 @@
 package Go;
-public class Board {
+public class Board { // ok
     private char[][] plateau;
     private int taille;
     private static final String alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
