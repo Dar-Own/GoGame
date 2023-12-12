@@ -37,7 +37,7 @@ public class test {
                     int newSize = Integer.valueOf(commandParts[1]);
                     if (newSize < 2 || newSize > 25) {
                         printResult(instructionNumber, false, "Unacceptable size");
-                    } else {
+                    } else { 
                         go = new Board(newSize);
                         printResult(instructionNumber, true, "");
                     }

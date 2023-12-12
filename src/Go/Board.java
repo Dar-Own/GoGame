@@ -1,5 +1,8 @@
 package Go;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     private char[][] plateau;
     private int taille;
@@ -7,6 +10,8 @@ public class Board {
     private char joueurActif;
     private int passesBlancs = 0;
     private int passesNoirs = 0;
+    private int nbPointNoir;
+    private int nbPointBlanc;
   
     public Board(int size) {
         this.taille = size;
@@ -22,8 +27,8 @@ public class Board {
 
     public void showBoard() {
     	System.out.println();
-    	System.out.println("WHITE (O) has captured 0 stones");
-    	System.out.println("BLACK (X) has captured 0 stones");
+    	System.out.println("WHITE (O) has captured "+ nbPointBlanc + "0 stones");
+    	System.out.println("BLACK (X) has captured "+ nbPointNoir  + "stones");
     	System.out.println();
         System.out.print("   ");        
         for (int i = 0; i < taille; i++) {
@@ -111,17 +116,6 @@ public class Board {
         return true;
     }
 
-
-    private boolean move(int row, int col) {
-        if (row < 0 || row >= taille || col < 0 || col >= taille || plateau[row][col] != '.') {
-            return false;
-        }
-        if (getActivePlayer()=='W')
-        	plateau[row][col] = 'O';
-        else
-        	plateau[row][col] = 'X';
-        return true;
-    }
     
 
     private boolean isValidVertex(String vertex) {
@@ -179,5 +173,106 @@ public class Board {
         passesBlancs = 0;
         passesNoirs = 0;
     }
-     
+    
+    // Méthode move mise à jour pour inclure la vérification des captures
+    private boolean move(int row, int col) {
+        if (row < 0 || row >= taille || col < 0 || col >= taille || plateau[row][col] != '.') {
+            return false;
+        }
+        char player = getActivePlayer() == 'W' ? 'O' : 'X';
+        plateau[row][col] = player;
+ 
+        // Vérifiez les captures potentielles
+        checkForGroupCaptures(row, col, player);
+        checkForCaptures(row, col, player);
+        return true;
+    }
+    
+    private void checkForCaptures(int row, int col, char player) {
+        char opponent = (player == 'O') ? 'X' : 'O';
+        // Vérifiez chaque direction autour du pion
+        captureIfSurrounded(row + 1, col, opponent);
+        captureIfSurrounded(row - 1, col, opponent);
+        captureIfSurrounded(row, col + 1, opponent);
+        captureIfSurrounded(row, col - 1, opponent);
+    }
+    
+    private void captureIfSurrounded(int row, int col, char opponent) {
+        if (row >= 0 && row < taille && col >= 0 && col < taille && plateau[row][col] == opponent) {
+            if (isSurrounded(row, col)) {
+                // Capture le pion
+                plateau[row][col] = '.';
+                
+            }
+        }
+    }
+    
+    private boolean isSurrounded(int row, int col) {
+        char pion = plateau[row][col];
+        char opponent = (pion == 'O') ? 'X' : 'O';
+
+        // Vérifiez si le pion est entouré sur les quatre côtés
+        return isOpponentOrBoundary(row + 1, col, opponent) &&
+               isOpponentOrBoundary(row - 1, col, opponent) &&
+               isOpponentOrBoundary(row, col + 1, opponent) &&
+               isOpponentOrBoundary(row, col - 1, opponent);
+    }
+    
+    private boolean isOpponentOrBoundary(int row, int col, char opponent) {
+        return row < 0 || row >= taille || col < 0 || col >= taille || plateau[row][col] == opponent;
+    }
+
+    // Méthodes ajoutées pour la capture de groupes
+    private void checkForGroupCaptures(int row, int col, char player) {
+        char opponent = (player == 'O') ? 'X' : 'O';
+        boolean[][] visited = new boolean[taille][taille];
+        List<int[]> group = findGroup(row, col, player, visited);
+
+        if (group.size() > 0 && isGroupSurrounded(group, opponent)) {
+            captureGroup(group);
+        }
+    }
+
+    private List<int[]> findGroup(int row, int col, char player, boolean[][] visited) {
+        List<int[]> group = new ArrayList<>();
+        findGroupDFS(row, col, player, visited, group);
+        return group;
+    }
+
+    private void findGroupDFS(int row, int col, char player, boolean[][] visited, List<int[]> group) {
+        if (row < 0 || row >= taille || col < 0 || col >= taille || visited[row][col] || plateau[row][col] != player) {
+            return;
+        }
+
+        visited[row][col] = true;
+        group.add(new int[]{row, col});
+
+        findGroupDFS(row + 1, col, player, visited, group);
+        findGroupDFS(row - 1, col, player, visited, group);
+        findGroupDFS(row, col + 1, player, visited, group);
+        findGroupDFS(row, col - 1, player, visited, group);
+    }
+
+    private boolean isGroupSurrounded(List<int[]> group, char opponent) {
+        for (int[] coords : group) {
+            int row = coords[0];
+            int col = coords[1];
+
+            if (hasLiberty(row + 1, col) || hasLiberty(row - 1, col) || 
+                hasLiberty(row, col + 1) || hasLiberty(row, col - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean hasLiberty(int row, int col) {
+        return row >= 0 && row < taille && col >= 0 && col < taille && plateau[row][col] == '.';
+    }
+
+    private void captureGroup(List<int[]> group) {
+        for (int[] coords : group) {
+            plateau[coords[0]][coords[1]] = '.';
+        }
+    }
 }
