@@ -7,4 +7,7 @@ Note sprint 1 28/11/2023 :
 - colonne I interdite
 - afficher les scores
 - 2 packetage : 1er go 2eme ihm
-v
+
+
+Note sprint 2 12/12/2023 :
+- Idéalement afficher le score à droite
