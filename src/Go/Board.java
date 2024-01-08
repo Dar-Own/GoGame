@@ -9,7 +9,7 @@ public class Board {
     private static final String alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
     private char joueurActif;
     private int passesBlancs = 0;
-    private int passesNoirs = 0;
+    private int passesNoirs = 0; 
     private int nbPointNoir;
     private int nbPointBlanc;
   
@@ -27,9 +27,6 @@ public class Board {
 
     public void showBoard() {
     	System.out.println();
-    	System.out.println("WHITE (O) has captured "+ nbPointBlanc + "0 stones");
-    	System.out.println("BLACK (X) has captured "+ nbPointNoir  + "stones");
-    	System.out.println();
         System.out.print("   ");        
         for (int i = 0; i < taille; i++) {
             System.out.print(alphabet.charAt(i) + " ");
@@ -38,14 +35,19 @@ public class Board {
         for (int i = taille - 1; i >= 0; i--) {
             int indiceLateral = i + 1;
             System.out.print((indiceLateral < 10 ? " " : "") + indiceLateral + " ");
-
             for (int j = 0; j < taille; j++) {
                 System.out.print(plateau[i][j] + " ");
             }
+            
             if (taille <10)
             	System.out.print("" + indiceLateral);
             else
             	System.out.print((indiceLateral < 10 ? " " : "") + indiceLateral);
+	            if (i==1)
+	            	System.out.print("     WHITE (O) has captured "+ nbPointBlanc + " stones");
+	            
+	            if (i==0)
+	            	System.out.print("     BLACK (X) has captured "+ nbPointNoir  + " stones");
             	System.out.println();
         }
         System.out.print("   ");
@@ -55,7 +57,19 @@ public class Board {
         System.out.println("    ");
     }
     
-    
+    public void gagnant() {
+    	if (isFinished()) {
+    		if (nbPointNoir>nbPointBlanc) {
+    			System.out.println("Black player win");
+    			System.out.println("Black : "+ nbPointNoir +" | White : "+ nbPointBlanc);
+    		}
+    		else {
+    			System.out.println("White player win");
+    			System.out.println("White : "+ nbPointBlanc + " | Black : "+ nbPointNoir );
+    		}
+    		
+    	}
+    }
     public boolean play(String move) {
         String[] parts = move.split(" ");
 
@@ -74,7 +88,6 @@ public class Board {
             vertex = parts[1];
         }
 
-        //System.out.println("Color: " + color + ", Vertex: " + vertex);
 
         if (!(color.equals("white") || color.equals("w") || color.equals("black") || color.equals("b"))) {
             return false;
@@ -107,7 +120,7 @@ public class Board {
                 passesNoirs++;
             }
             if ((player == 'W' && passesBlancs == 2) || (player == 'B' && passesNoirs == 2)) {
-                endGame();
+                passGame();
                 return true;
             }
         }
@@ -118,12 +131,12 @@ public class Board {
 
     
 
-    private boolean isValidVertex(String vertex) {
+    public boolean isValidVertex(String vertex) {
         return vertex.matches("[a-zA-Z](1[0-9]|[1-9])|pass");
     }
     
 
-    private int[] getCoordinates(String vertex) {
+    public int[] getCoordinates(String vertex) {
         int[] coordinates = new int[2];
         if (vertex.equals("pass")) {
             coordinates[0] = -1;  
@@ -136,27 +149,38 @@ public class Board {
         return coordinates;
     }
     
-    
-    private void switchPlayer() {
+     
+    public void switchPlayer() {
         joueurActif = (joueurActif == 'W') ? 'B' : 'W';
-    }
+    } 
 
    
     public char getActivePlayer() {
         return joueurActif;
     }
     
-    private boolean isCorrectPlayer(char player) {
+    public boolean isCorrectPlayer(char player) {
         return player == joueurActif;
     }
     
 
-    private void endGame() {
+    public void passGame() {
     	if (getActivePlayer()=='W')
     		System.out.println("Game over. Black wins!");
     	else
     		System.out.println("Game over. White wins!");
         System.exit(0);
+    }
+    
+    public boolean isFinished() {
+        for (int i = taille - 1; i >= 0; i--) {
+            for (int j = 0; j < taille; j++) {
+            	if (plateau[i][j]=='.')
+            		return false;
+            }
+        }
+        
+        return true;
     }
     
     
@@ -172,32 +196,31 @@ public class Board {
         }
         passesBlancs = 0;
         passesNoirs = 0;
+        nbPointNoir=0;
+        nbPointBlanc=0;
     }
     
-    // Méthode move mise à jour pour inclure la vérification des captures
-    private boolean move(int row, int col) {
+    public boolean move(int row, int col) {
         if (row < 0 || row >= taille || col < 0 || col >= taille || plateau[row][col] != '.') {
             return false;
         }
         char player = getActivePlayer() == 'W' ? 'O' : 'X';
         plateau[row][col] = player;
- 
-        // Vérifiez les captures potentielles
+
         checkForGroupCaptures(row, col, player);
-        checkForCaptures(row, col, player);
+        regardercapture(row, col, player);
         return true;
     }
     
-    private void checkForCaptures(int row, int col, char player) {
-        char opponent = (player == 'O') ? 'X' : 'O';
-        // Vérifiez chaque direction autour du pion
-        captureIfSurrounded(row + 1, col, opponent);
-        captureIfSurrounded(row - 1, col, opponent);
-        captureIfSurrounded(row, col + 1, opponent);
-        captureIfSurrounded(row, col - 1, opponent);
+    public void regardercapture(int row, int col, char player) {
+        char chien = (player == 'O') ? 'X' : 'O';
+        Remplace(row + 1, col, chien);
+        Remplace(row - 1, col, chien);
+        Remplace(row, col + 1, chien);
+        Remplace(row, col - 1, chien);
     }
     
-    private void captureIfSurrounded(int row, int col, char opponent) {
+    public void Remplace(int row, int col, char opponent) {
         if (row >= 0 && row < taille && col >= 0 && col < taille && plateau[row][col] == opponent) {
             if (isSurrounded(row, col)) {
                 // Capture le pion
@@ -207,39 +230,46 @@ public class Board {
         }
     }
     
-    private boolean isSurrounded(int row, int col) {
+    public boolean isSurrounded(int row, int col) {
         char pion = plateau[row][col];
         char opponent = (pion == 'O') ? 'X' : 'O';
 
-        // Vérifiez si le pion est entouré sur les quatre côtés
         return isOpponentOrBoundary(row + 1, col, opponent) &&
                isOpponentOrBoundary(row - 1, col, opponent) &&
                isOpponentOrBoundary(row, col + 1, opponent) &&
                isOpponentOrBoundary(row, col - 1, opponent);
     }
     
-    private boolean isOpponentOrBoundary(int row, int col, char opponent) {
+    public boolean isOpponentOrBoundary(int row, int col, char opponent) {
         return row < 0 || row >= taille || col < 0 || col >= taille || plateau[row][col] == opponent;
     }
 
-    // Méthodes ajoutées pour la capture de groupes
-    private void checkForGroupCaptures(int row, int col, char player) {
-        char opponent = (player == 'O') ? 'X' : 'O';
-        boolean[][] visited = new boolean[taille][taille];
-        List<int[]> group = findGroup(row, col, player, visited);
 
-        if (group.size() > 0 && isGroupSurrounded(group, opponent)) {
-            captureGroup(group);
+    public void checkForGroupCaptures(int row, int col, char player) {
+        char opponent = (player == 'O') ? 'X' : 'O';
+        checkAndCaptureGroup(row + 1, col, opponent);
+        checkAndCaptureGroup(row - 1, col, opponent);
+        checkAndCaptureGroup(row, col + 1, opponent);
+        checkAndCaptureGroup(row, col - 1, opponent);
+    }
+    
+    public void checkAndCaptureGroup(int row, int col, char opponent) {
+        if (row >= 0 && row < taille && col >= 0 && col < taille && plateau[row][col] == opponent) {
+            boolean[][] visited = new boolean[taille][taille];
+            List<int[]> group = findGroup(row, col, opponent, visited);
+            if (isGroupSurrounded(group)) {
+                captureGroup(group);
+            }
         }
     }
 
-    private List<int[]> findGroup(int row, int col, char player, boolean[][] visited) {
+    public List<int[]> findGroup(int row, int col, char player, boolean[][] visited) {
         List<int[]> group = new ArrayList<>();
         findGroupDFS(row, col, player, visited, group);
         return group;
     }
 
-    private void findGroupDFS(int row, int col, char player, boolean[][] visited, List<int[]> group) {
+    public void findGroupDFS(int row, int col, char player, boolean[][] visited, List<int[]> group) {
         if (row < 0 || row >= taille || col < 0 || col >= taille || visited[row][col] || plateau[row][col] != player) {
             return;
         }
@@ -253,11 +283,12 @@ public class Board {
         findGroupDFS(row, col - 1, player, visited, group);
     }
 
-    private boolean isGroupSurrounded(List<int[]> group, char opponent) {
+    public boolean isGroupSurrounded(List<int[]> group) {
         for (int[] coords : group) {
             int row = coords[0];
             int col = coords[1];
-
+ 
+           
             if (hasLiberty(row + 1, col) || hasLiberty(row - 1, col) || 
                 hasLiberty(row, col + 1) || hasLiberty(row, col - 1)) {
                 return false;
@@ -266,13 +297,28 @@ public class Board {
         return true;
     }
 
-    private boolean hasLiberty(int row, int col) {
+    public boolean hasLiberty(int row, int col) {
         return row >= 0 && row < taille && col >= 0 && col < taille && plateau[row][col] == '.';
     }
 
-    private void captureGroup(List<int[]> group) {
+    public void captureGroup(List<int[]> group) {
+        int capturedStones = group.size();
         for (int[] coords : group) {
             plateau[coords[0]][coords[1]] = '.';
         }
+        
+        if (joueurActif == 'W') {
+        	nbPointBlanc += capturedStones;
+        } else {
+            nbPointNoir += capturedStones;
+        } 
     }
+    
+    public int getTaille() {
+    	return taille;
+    }
+
+	public char[][] getPlateau() {
+		return plateau;
+	}
 }
