@@ -12,13 +12,14 @@ public class ComputerPlayer implements IPlayer {
     }
     
     public boolean play(String move, Board board) {
-        if (move.equalsIgnoreCase("random")) {
-            move = generateRandomMove(board);
+        if (move == null || move.isEmpty()) {
+            move = generateRandomMove(board); 
         }
         return board.play(playerColor + " " + move);
     }
+
     
-    private String generateRandomMove(Board board) {
+    public String generateRandomMove(Board board) {
         int row, col;
         String randomMove = "";
 
@@ -32,7 +33,6 @@ public class ComputerPlayer implements IPlayer {
             }
             
         }
-        System.out.println(randomMove);
         return randomMove;
     }
 
