@@ -18,9 +18,34 @@ public class test {
         Scanner entry = new Scanner(System.in);
 
         while (true) {
+        	if (go != null) {
+        	    char activePlayerColor = go.getActivePlayer();
+        	    if ((activePlayerColor == 'W' && whitePlayer instanceof ComputerPlayer) ||
+        	        (activePlayerColor == 'B' && blackPlayer instanceof ComputerPlayer)) {
+        	        String move = ((ComputerPlayer) (activePlayerColor == 'W' ? whitePlayer : blackPlayer)).generateRandomMove(go);
+        	        
+        	        boolean moveSuccess = (activePlayerColor == 'W' ? whitePlayer : blackPlayer).play(move, go);
+        	        if (moveSuccess) {
+        	            System.out.println(move);
+        	            go.showBoard();
+        	        } else {
+        	            printResult(currentInstructionNumber, false, "Mouvement illégal");
+        	        }
+        	        currentInstructionNumber++;
+        	        if (go.isFinished()) {
+        	            go.gagnant();
+        	            entry.close();
+        	            System.exit(0);
+        	        }
+        	        continue; 
+        	    }
+        	}
+
+
             String input = entry.nextLine();
             String[] commandParts = input.split(" ");
             int instructionNumber = -1;
+            boolean moveSuccess = false;
 
             if (commandParts.length > 0 && commandParts[0].matches("\\d+")) {
                 instructionNumber = Integer.parseInt(commandParts[0]);
@@ -48,7 +73,7 @@ public class test {
                     } else {
                         blackPlayer = createPlayer(playerType, color);
                     }
-                    printResult(instructionNumber, true, ""); // Confirme le changement
+                    printResult(instructionNumber, true, "");
                 } else {
                     printResult(instructionNumber, false, "Cannot change player type after game has started");
                 }
@@ -66,60 +91,42 @@ public class test {
             } else if (commandParts[0].equals("showboard") && go != null) {
                 printResult(instructionNumber, true, "");
                 go.showBoard();
-            } else if (commandParts[0].equals("play") && go != null) {
-                char color = commandParts[1].charAt(0);
-                color = Character.toUpperCase(color); 
+            }
 
-                char activePlayerColor = go.getActivePlayer();
-
-                if (color != activePlayerColor) {
-                    printResult(instructionNumber, false, "It's not your turn");
-                } else {
-                    boolean moveSuccess = false;
-
-
-                    StringBuilder moveCommand = new StringBuilder();
-                    for (int i = 1; i < commandParts.length; i++) {
-                        moveCommand.append(commandParts[i]).append(" ");
-                    }
-
-                    if (activePlayerColor == 'W' && whitePlayer instanceof ComputerPlayer) {
-
-                        String move = commandParts.length > 2 && commandParts[2].equalsIgnoreCase("random") ? "random" : moveCommand.toString().trim();
-                        moveSuccess = whitePlayer.play(move, go);
-                    } 
-             
-                    else if (activePlayerColor == 'W' && whitePlayer instanceof ConsolePlayer) {
+			else if (commandParts[0].equals("play") && go != null) {
+				char activePlayerColor = go.getActivePlayer();
+                StringBuilder moveCommand = new StringBuilder();
+                for (int i = 1; i < commandParts.length; i++) {
+                    moveCommand.append(commandParts[i]).append(" ");
+                }
+			
+                if (activePlayerColor == 'W') {
+                    if (whitePlayer instanceof ConsolePlayer) {
                         moveSuccess = whitePlayer.play(moveCommand.toString().trim(), go);
                     }
-                    
-         
-                    if (activePlayerColor == 'B' && blackPlayer instanceof ComputerPlayer) {
-                        String move = commandParts.length > 2 && commandParts[2].equalsIgnoreCase("random") ? "random" : moveCommand.toString().trim();
-                        moveSuccess = blackPlayer.play(move, go);
-                    } 
-                    else if (activePlayerColor == 'B' && blackPlayer instanceof ConsolePlayer) {
+                } else if (activePlayerColor == 'B') {
+                    if (blackPlayer instanceof ConsolePlayer) {
                         moveSuccess = blackPlayer.play(moveCommand.toString().trim(), go);
                     }
-                    
-                    if (!moveSuccess) {
-                        printResult(instructionNumber, false, "Illegal move");
-                    } else {
-                    	isGameStarted = true; 
-                        printResult(instructionNumber, true, "");
-                        if ((activePlayerColor == 'W' && whitePlayer instanceof ComputerPlayer) || 
-                                (activePlayerColor == 'B' && blackPlayer instanceof ComputerPlayer)) {
-                                go.showBoard();
-                            }
-                    }
-                    
-                    if (go.isFinished()) {
-                    	go.gagnant();
-                    	 entry.close();
-                    	 System.exit(0);
-                    }
                 }
-            } else if (commandParts[0].equals("clearboard") && go != null) {
+
+
+			    if (!moveSuccess) {
+			        printResult(instructionNumber, false, "Illegal move");
+			    } else {
+			        isGameStarted = true; 
+			        printResult(instructionNumber, true, "");
+			        go.showBoard();
+			    }
+			    
+			    if (go.isFinished()) {
+			        go.gagnant();
+			        entry.close();
+			        System.exit(0);
+			    }
+			}
+           
+			else if (commandParts[0].equals("clearboard") && go != null) {
                 go.clearBoard();
                 printResult(instructionNumber, true, "");
             } else {
