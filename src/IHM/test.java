@@ -22,6 +22,10 @@ public class test {
         	    char activePlayerColor = go.getActivePlayer();
         	    if ((activePlayerColor == 'W' && whitePlayer instanceof ComputerPlayer) ||
         	        (activePlayerColor == 'B' && blackPlayer instanceof ComputerPlayer)) {
+        	    	System.out.println();
+        	    	System.out.println();
+        	    	System.out.print(activePlayerColor);
+        	    	System.out.print(':');
         	        String move = ((ComputerPlayer) (activePlayerColor == 'W' ? whitePlayer : blackPlayer)).generateRandomMove(go);
         	        
         	        boolean moveSuccess = (activePlayerColor == 'W' ? whitePlayer : blackPlayer).play(move, go);
